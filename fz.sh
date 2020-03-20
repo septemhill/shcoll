@@ -11,9 +11,14 @@ case $1 in
 	*) ABSOLUTE=${CPATH}/$1;;
 esac
 
+FZ=
+
 for f in `ls ${ABSOLUTE}`
 do
 	if [ -d "${ABSOLUTE}/${f}" ]; then
-		du -cksh `realpath ${ABSOLUTE}/$f` 2>/dev/null | head -n 1
+		ABPATH=`realpath ${ABSOLUTE}/$f`
+		FZ="${FZ}"$'\n'$(du -cksh ${ABPATH} 2>/dev/null | head -n 1)
 	fi
 done
+
+echo "${FZ}" | sort -h
